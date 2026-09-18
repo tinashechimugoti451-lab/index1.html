@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DEFACTOL | Engineering the Future</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Plus+Jakarta+Sans:wght@300;400;700;800&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { brandNavy: '#0A0B1E', brandOrange: '#F98125', glassWhite: 'rgba(255,255,255,0.05)' },
+                    fontFamily: { header: ['Syncopate', 'sans-serif'], body: ['Plus Jakarta Sans', 'sans-serif'], inter: ['Inter', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #050714; color: white; font-family: 'Inter', sans-serif; min-height: 100vh; }
+        .hero-gradient { background: linear-gradient(to right, #0A0B1E, #161B40); }
+        .orange-glow:hover { box-shadow: 0 0 30px rgba(249, 129, 37, 0.4); }
+        .glass { backdrop-filter: blur(10px); background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255,255,255,0.1); }
+        
+        .master-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        @media (min-width: 768px) { .master-grid { grid-template-columns: repeat(4, 1fr); gap: 20px; } }
+        @media (min-width: 1200px) { .master-grid { grid-template-columns: repeat(6, 1fr); } }
+
+        .spares-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        @media (min-width: 768px) { .spares-grid { grid-template-columns: repeat(4, 1fr); gap: 15px; } }
+        @media (min-width: 1200px) { .spares-grid { grid-template-columns: repeat(6, 1fr); } }
+
+        .product-card { background: #1a1b4b; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 10px; transition: 0.3s; display: flex; flex-direction: column; }
+        .product-card:hover { border-color: #F98125; transform: translateY(-5px); }
+        .part-card { background: #1a1b4b; border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 10px; transition: 0.3s; display: flex; flex-direction: column; }
+        .part-card:hover { border-color: #F98125; transform: translateY(-3px); }
+        
+        .img-box { aspect-ratio: 1/1; background: #000; border-radius: 8px; overflow: hidden; margin-bottom: 8px; }
+        .img-box img { width: 100%; height: 100%; object-fit: cover; }
+        .search-area { background: #1a1b4b; border: 1px solid rgba(255,255,255,0.2); }
+
+        .order-card { 
+            background: rgba(26, 27, 75, 0.7); 
+            backdrop-filter: blur(25px); 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+        }
+        input, textarea, select {
+            background: rgba(0, 0, 0, 0.4) !important;
+            border: 1px solid rgba(255, 255, 255, 0.15) !important;
+            color: white !important;
+            transition: 0.3s;
+        }
+        input:focus, textarea:focus {
+            border-color: #F98125 !important;
+            outline: none;
+            box-shadow: 0 0 15px rgba(249, 129, 37, 0.2);
+        }
+        .page-view { display: none; }
+        .page-view.active { display: block; }
+    </style>
+</head>
+<body class="bg-brandNavy text-white font-body overflow-x-hidden">
+
+    <!-- Shared Navigation -->
+    <nav class="sticky top-0 z-50 glass py-5 px-6 md:px-16 flex justify-between items-center border-b border-white/10">
+        <a href="#home" class="flex flex-col leading-none">
+            <span class="font-header text-2xl font-bold tracking-tighter text-brandOrange">DEFACTOL<span class="text-[#F98125]">.</span></span>
+            <span class="text-[9px] uppercase tracking-[0.4em] opacity-60">Industrial Excellence</span>
+        </a>
+        <div class="hidden md:flex gap-8 font-bold text-[11px] uppercase tracking-widest items-center">
+            <a href="#home" class="hover:text-brandOrange transition">Home</a>
+            <a href="#electrical" class="hover:text-brandOrange transition">Electricals</a>
+            <a href="#spares" class="hover:text-brandOrange transition">Motor Spares</a>
+            <a href="#order" class="border border-brandOrange px-6 py-2 rounded-full hover:bg-brandOrange transition">Quick Order</a>
+        </div>
+    </nav>
+
+    <!-- PAGE 1: INDEX / HOME -->
+    <div id="home-page" class="page-view">
+        <section class="relative min-h-[calc(100vh-80px)] flex items-center justify-center pt-10">
+            <div class="absolute inset-0 z-0">
+                <div class="absolute inset-0 bg-brandNavy/80 z-10"></div>
+                <img src="https://images.unsplash.com/photo-1513828583688-c52646db42da?auto=format&fit=crop&q=80&w=2000" class="w-full h-full object-cover" alt="Background">
+            </div>
+
+            <div class="relative z-20 text-center px-6">
+                <h1 class="font-header text-5xl md:text-8xl font-bold mb-6 tracking-tighter leading-none">
+                    POWER <span class="text-brandOrange italic">&</span> PRECISION
+                </h1>
+                <p class="max-w-2xl mx-auto text-lg md:text-xl opacity-70 mb-12 font-light tracking-wide">
+                    Supplying heavy-duty electrical infrastructure and vehicle parts tailored for Honda Fit, Toyota HiAce, Bubble, RunX, Probox, Nissan AD Van, and NV350.
+                </p>
+                <div class="flex flex-col md:flex-row gap-6 justify-center">
+                    <a href="#electrical" class="bg-brandOrange text-white px-12 py-5 rounded-full font-bold uppercase tracking-widest orange-glow transition-all duration-300">Explore Electrical</a>
+                    <a href="#spares" class="glass px-12 py-5 rounded-full font-bold uppercase tracking-widest hover:bg-white hover:text-brandNavy transition-all duration-300">Browse Vehicle Spares</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-24 px-6 md:px-16 bg-white text-brandNavy">
+            <div class="max-w-7xl mx-auto grid md:grid-cols-3 gap-12">
+                <div class="p-8 border-l-4 border-brandOrange">
+                    <h3 class="font-header text-sm mb-4">01. Quality</h3>
+                    <p class="text-gray-600 italic">Every part is tested for industrial and automotive endurance.</p>
+                </div>
+                <div class="p-8 border-l-4 border-brandOrange">
+                    <h3 class="font-header text-sm mb-4">02. Expertise</h3>
+                    <p class="text-gray-600 italic">Technical support for custom vehicle fittings and electrical installations.</p>
+                </div>
+                <div class="p-8 border-l-4 border-brandOrange">
+                    <h3 class="font-header text-sm mb-4">03. Logistics</h3>
+                    <p class="text-gray-600 italic">Fast delivery and easy ordering via WhatsApp/Email.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- PAGE 2: ELECTRICAL -->
+    <div id="electrical-page" class="page-view">
+        <div class="bg-[#1a1b4b] p-5 border-b border-white/10 shadow-2xl">
+            <div class="max-w-[1600px] mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="text-xl font-black italic uppercase">Electrical <span class="text-[#F98125]">Division</span></div>
+                <div class="relative w-full md:w-1/2 search-area rounded-xl overflow-hidden">
+                    <i class="fas fa-search absolute left-4 top-3.5 text-gray-400"></i>
+                    <input type="text" id="elecSearch" onkeyup="filterElec()" placeholder="Search electrical gadgets..." class="w-full pl-12 pr-4 py-3 bg-transparent outline-none text-white">
+                </div>
+                <a href="#spares" class="text-[10px] font-bold border border-[#F98125] text-[#F98125] px-4 py-2 rounded hover:bg-[#F98125] hover:text-white transition">GO TO SPARES</a>
+            </div>
+        </div>
+
+        <main class="max-w-[1600px] mx-auto p-4 md:p-10">
+            <div id="elecGrid" class="master-grid"></div>
+        </main>
+    </div>
+
+    <!-- PAGE 3: SPARES -->
+    <div id="spares-page" class="page-view">
+        <div class="bg-[#1a1b4b] p-6 border-b border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
+            <h2 class="text-3xl font-black uppercase italic text-[#F98125]">Motor <span class="text-white">Spares Catalog</span></h2>
+            <div class="flex flex-col md:flex-row gap-3 w-full md:w-2/3">
+                <!-- Vehicle Filter Dropdown -->
+                <select id="carModelFilter" onchange="sFilter()" class="bg-[#050714] border border-white/20 p-2.5 rounded-lg text-sm text-white md:w-1/3 outline-none">
+                    <option value="">All Vehicles</option>
+                    <option value="Honda Fit">Honda Fit</option>
+                    <option value="Toyota HiAce">Toyota HiAce</option>
+                    <option value="Toyota Bubble">Toyota Bubble (Corolla)</option>
+                    <option value="Toyota RunX">Toyota RunX</option>
+                    <option value="Toyota Probox">Toyota Probox</option>
+                    <option value="Nissan AD Van">Nissan AD Van</option>
+                    <option value="Nissan NV350">Nissan NV350</option>
+                </select>
+                <!-- Text Search -->
+                <input type="text" id="spareSearch" onkeyup="sFilter()" placeholder="Search part or model..." class="bg-[#050714] border border-white/20 p-2.5 rounded-lg w-full md:w-2/3 text-sm">
+            </div>
+        </div>
+
+        <div class="max-w-[1600px] mx-auto p-4 md:p-10">
+            <div id="sGrid" class="spares-grid"></div>
+        </div>
+    </div>
+
+    <!-- PAGE 4: ORDER -->
+    <div id="order-page" class="page-view py-12 flex items-center justify-center px-6">
+        <div class="w-full max-w-xl order-card p-8 md:p-12 rounded-[2.5rem]">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-black uppercase italic tracking-tighter">Secure <span class="text-[#F98125]">Order Form</span></h2>
+                <p class="text-[10px] text-gray-400 uppercase tracking-[0.4em] mt-2 font-bold">Logistics & Delivery Processing</p>
+            </div>
+
+            <form id="orderForm" class="space-y-5">
+                <div class="bg-black/20 p-4 rounded-2xl border border-[#F98125]/30">
+                    <label class="text-[9px] font-bold uppercase text-[#F98125] tracking-widest block mb-1">Item Ref Number & Details</label>
+                    <input type="text" id="partRef" readonly class="w-full bg-transparent border-none p-0 text-lg font-black italic tracking-tight focus:ring-0">
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-[10px] font-bold uppercase text-gray-400 ml-2 mb-1 block">Full Name</label>
+                        <input type="text" id="custName" required placeholder="Name or Company" class="w-full p-4 rounded-xl">
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-bold uppercase text-gray-400 ml-2 mb-1 block">Phone Number</label>
+                        <input type="tel" id="custPhone" required placeholder="+263..." class="w-full p-4 rounded-xl">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="text-[10px] font-bold uppercase text-gray-400 ml-2 mb-1 block">Detailed Delivery Address</label>
+                    <textarea id="custAddress" required rows="2" placeholder="Street Number, Name, and Area" class="w-full p-4 rounded-xl resize-none"></textarea>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-[10px] font-bold uppercase text-gray-400 ml-2 mb-1 block">City / Suburb</label>
+                        <input type="text" id="custCity" required placeholder="e.g. Harare, Borrowdale" class="w-full p-4 rounded-xl">
+                    </div>
+                    <div>
+                        <label class="text-[10px] font-bold uppercase text-gray-400 ml-2 mb-1 block">Preferred Payment</label>
+                        <select id="paymentMethod" class="w-full p-4 rounded-xl appearance-none">
+                            <option value="Cash on Delivery">Cash on Delivery</option>
+                            <option value="EcoCash / Mobile Money">EcoCash / Mobile Money</option>
+                            <option value="ZIPIT / Bank Transfer">ZIPIT / Bank Transfer</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="text-[10px] font-bold uppercase text-gray-400 ml-2 mb-1 block">Delivery Instructions / Chassis Specs (Optional)</label>
+                    <input type="text" id="notes" placeholder="e.g. Engine Model (e.g., L13A, 1TR, 1NZ), Blue gate" class="w-full p-4 rounded-xl">
+                </div>
+
+                <div class="pt-6">
+                    <button type="button" onclick="completeOrder()" class="w-full bg-[#F98125] hover:bg-[#D45D00] text-white py-5 rounded-2xl font-black uppercase tracking-[0.2em] shadow-2xl transition-all transform hover:scale-[1.03] flex items-center justify-center gap-3">
+                        <i class="fab fa-whatsapp text-xl"></i> COMPLETE ORDER
+                    </button>
+                </div>
+            </form>
+
+            <div class="mt-8 text-center">
+                <a href="#home" class="text-[10px] font-bold text-gray-500 uppercase hover:text-white transition tracking-widest">
+                    ← Return to Home
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const electricalItems = [
+            {id:'E-01', name:'60A Circuit Breaker', img:'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&q=80&w=400'},
+            {id:'E-02', name:'Digital Multimeter', img:'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&q=80&w=400'},
+            {id:'E-03', name:'Phase Relay', img:'https://images.unsplash.com/photo-1581092335397-9583fe92d232?auto=format&fit=crop&q=80&w=400'},
+            {id:'E-04', name:'Industrial Plug', img:'https://images.unsplash.com/photo-1544724569-5f546fd6f2b5?auto=format&fit=crop&q=80&w=400'},
+            {id:'E-05', name:'LED Floodlight', img:'https://images.unsplash.com/photo-1565814636199-ae8133055c1c?auto=format&fit=crop&q=80&w=400'},
+            {id:'E-06', name:'Change Over', img:'https://images.unsplash.com/photo-1581092162384-8987c1d64718?auto=format&fit=crop&q=80&w=400'},
+            {id:'E-07', name:'Solar Panel 550W', img:'https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?auto=format&fit=crop&q=80&w=400'},
+            {id:'E-08', name:'Inverter 5KW', img:'https://images.unsplash.com/photo-1617788138017-80ad40651399?auto=format&fit=crop&q=80&w=400'},
+            {id:'E-09', name:'Voltage Monitor', img:'https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?auto=format&fit=crop&q=80&w=400'},
+            {id:'E-10', name:'Copper Busbar', img:'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&q=80&w=400'},
+            {id:'E-11', name:'DB Board 12 Way', img:'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&q=80&w=400'},
+            {id:'E-12', name:'Earth Leakage', img:'https://images.unsplash.com/photo-1544724569-5f546fd6f2b5?auto=format&fit=crop&q=80&w=400'},
+            {id:'E-13', name:'Control Panel', img:'https://images.unsplash.com/photo-1581092335397-9583fe92d232?auto=format&fit=crop&q=80&w=400'},
+            {id:'E-14', name:'Capacitor Bank', img:'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=400'},
+            {id:'E-15', name:'AC Contactor', img:'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&q=80&w=400'},
+            {id:'E-16', name:'Smart Meter', img:'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&q=80&w=400'},
+            {id:'E-17', name:'Timer Switch', img:'https://images.unsplash.com/photo-1581092162384-8987c1d64718?auto=format&fit=crop&q=80&w=400'},
+            {id:'E-18', name:'Surge Arrester', img:'https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?auto=format&fit=crop&q=80&w=400'},
+            {id:'E-19', name:'High Volt Cable', img:'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&q=80&w=400'},
+            {id:'E-20', name:'Insulator set', img:'https://images.unsplash.com/photo-1544724569-5f546fd6f2b5?auto=format&fit=crop&q=80&w=400'},
+            {id:'E-21', name:'Tool kit bag', img:'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&q=80&w=400'},
+            {id:'E-22', name:'Step Down Trans', img:'https://images.unsplash.com/photo-1581092335397-9583fe92d232?auto=format&fit=crop&q=80&w=400'},
+            {id:'E-23', name:'Limit Switch', img:'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=400'},
+            {id:'E-24', name:'Power Supply', img:'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&q=80&w=400'}
+        ];
+
+        // Specific Vehicle-assigned Motor Spares Catalog
+        const motorSpares = [
+            {id:'M-01', name:'Front Brake Pads', car:'Honda Fit', img:'https://images.unsplash.com/photo-1600792520457-60e5888e5d0a?auto=format&fit=crop&q=80&w=400'},
+            {id:'M-02', name:'CVVT Oil Filter Kit', car:'Honda Fit', img:'https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?auto=format&fit=crop&q=80&w=400'},
+            {id:'M-03', name:'Iridium Spark Plugs', car:'Honda Fit', img:'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&q=80&w=400'},
+            {id:'M-04', name:'Heavy Duty Shock Absorber', car:'Honda Fit', img:'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&q=80&w=400'},
+            
+            {id:'M-05', name:'Diesel/Petrol Radiator', car:'Toyota HiAce', img:'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&q=80&w=400'},
+            {id:'M-06', name:'Clutch Plate & Pressure Kit', car:'Toyota HiAce', img:'https://images.unsplash.com/photo-1600792520457-60e5888e5d0a?auto=format&fit=crop&q=80&w=400'},
+            {id:'M-07', name:'Heavy Duty Leaf Springs & Shocks', car:'Toyota HiAce', img:'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&q=80&w=400'},
+            {id:'M-08', name:'Water Pump Assembly', car:'Toyota HiAce', img:'https://images.unsplash.com/photo-1600792520457-60e5888e5d0a?auto=format&fit=crop&q=80&w=400'},
+
+            {id:'M-09', name:'Suspension Arm Set', car:'Toyota Bubble', img:'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&q=80&w=400'},
+            {id:'M-10', name:'Timing Belt & Tensioner', car:'Toyota Bubble', img:'https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?auto=format&fit=crop&q=80&w=400'},
+            {id:'M-11', name:'Brake Disc Rotors', car:'Toyota Bubble', img:'https://images.unsplash.com/photo-1600792520457-60e5888e5d0a?auto=format&fit=crop&q=80&w=400'},
+
+            {id:'M-12', name:'Fuel Pump Assembly', car:'Toyota RunX', img:'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&q=80&w=400'},
+            {id:'M-13', name:'CV Joint Outer Kit', car:'Toyota RunX', img:'https://images.unsplash.com/photo-1600792520457-60e5888e5d0a?auto=format&fit=crop&q=80&w=400'},
+            {id:'M-14', name:'Alternator 12V Assembly', car:'Toyota RunX', img:'https://images.unsplash.com/photo-1600792520457-60e5888e5d0a?auto=format&fit=crop&q=80&w=400'},
+
+            {id:'M-15', name:'Rear Heavy Duty Springs', car:'Toyota Probox', img:'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&q=80&w=400'},
+            {id:'M-16', name:'Wheel Bearing Hub Kit', car:'Toyota Probox', img:'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&q=80&w=400'},
+            {id:'M-17', name:'Engine Mounting Set', car:'Toyota Probox', img:'https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?auto=format&fit=crop&q=80&w=400'},
+
+            {id:'M-18', name:'Ignition Coil Set', car:'Nissan AD Van', img:'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&q=80&w=400'},
+            {id:'M-19', name:'Tie Rod End & Rack End', car:'Nissan AD Van', img:'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&q=80&w=400'},
+            {id:'M-20', name:'Air Filter Element', car:'Nissan AD Van', img:'https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?auto=format&fit=crop&q=80&w=400'},
+
+            {id:'M-21', name:'YD25/QR25 Starter Motor', car:'Nissan NV350', img:'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&q=80&w=400'},
+            {id:'M-22', name:'Front Headlight Assembly', car:'Nissan NV350', img:'https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&q=80&w=400'},
+            {id:'M-23', name:'Cylinder Head Gasket', car:'Nissan NV350', img:'https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?auto=format&fit=crop&q=80&w=400'},
+            {id:'M-24', name:'Heavy Duty Clutch Kit', car:'Nissan NV350', img:'https://images.unsplash.com/photo-1600792520457-60e5888e5d0a?auto=format&fit=crop&q=80&w=400'}
+        ];
+
+        // Render Electrical Items
+        document.getElementById('elecGrid').innerHTML = electricalItems.map(i => `
+            <div class="product-card">
+                <div class="img-box"><img src="${i.img}" onerror="this.src='https://via.placeholder.com/300/1a1b4b/ffffff?text=Electrical+Item'"></div>
+                <p class="text-[9px] font-bold text-[#F98125] uppercase">${i.id}</p>
+                <h3 class="text-[11px] font-bold h-8 overflow-hidden mb-4 p-name">${i.name}</h3>
+                <div class="mt-auto border-t border-white/5 pt-3 flex justify-between items-center">
+                    <span class="text-sm font-black">$Price</span>
+                    <a href="#order?item=${i.id}" class="bg-[#F98125] text-white px-3 py-1 rounded text-[10px] font-bold uppercase">ORDER</a>
+                </div>
+            </div>
+        `).join('');
+
+        // Render Motor Spares
+        function renderSpares() {
+            document.getElementById('sGrid').innerHTML = motorSpares.map(s => `
+                <div class="part-card" data-car="${s.car}">
+                    <div class="img-box"><img src="${s.img}" onerror="this.src='https://via.placeholder.com/300/1a1b4b/ffffff?text=Motor+Spare'"></div>
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="text-[8px] font-bold text-[#F98125]">${s.id}</span>
+                        <span class="text-[8px] bg-[#050714] text-gray-300 border border-white/10 px-1.5 py-0.5 rounded font-bold">${s.car}</span>
+                    </div>
+                    <h3 class="text-[11px] font-bold h-8 overflow-hidden s-name">${s.name}</h3>
+                    <div class="flex justify-between items-center mt-auto pt-3">
+                        <span class="text-sm font-black">$Price</span>
+                        <a href="#order?item=${s.id}%20(${encodeURIComponent(s.car)}%20${encodeURIComponent(s.name)})" class="text-[9px] bg-[#F98125] px-2 py-1 rounded font-black uppercase">ORDER</a>
+                    </div>
+                </div>
+            `).join('');
+        }
+        renderSpares();
+
+        // Routing Logic - Fixed to ALWAYS land on Home Page by default
+        function handleRoute() {
+            let rawHash = window.location.hash;
+
+            // If user opens the website freshly without a hash or directly with an empty hash, force Home page
+            if (!rawHash || rawHash === '' || rawHash === '#') {
+                rawHash = '#home';
+            }
+
+            const [route, queryString] = rawHash.split('?');
+
+            document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active'));
+
+            if (route === '#electrical') {
+                document.getElementById('electrical-page').classList.add('active');
+            } else if (route === '#spares') {
+                document.getElementById('spares-page').classList.add('active');
+            } else if (route === '#order') {
+                document.getElementById('order-page').classList.add('active');
+                
+                const params = new URLSearchParams(queryString);
+                if (params.has('item')) {
+                    document.getElementById('partRef').value = params.get('item');
+                } else {
+                    document.getElementById('partRef').value = "GENERAL INQUIRY";
+                }
+            } else {
+                document.getElementById('home-page').classList.add('active');
+            }
+            window.scrollTo(0, 0);
+        }
+
+        window.addEventListener('hashchange', handleRoute);
+        
+        // Ensure home page opens when page refreshes or opens initially
+        window.addEventListener('load', () => {
+            if (!window.location.hash || window.location.hash === '#order') {
+                window.location.hash = '#home';
+            }
+            handleRoute();
+        });
+
+        // Filters
+        function filterElec() {
+            let val = document.getElementById('elecSearch').value.toUpperCase();
+            let cards = document.querySelectorAll('#elecGrid .product-card');
+            cards.forEach(card => {
+                let name = card.querySelector('.p-name').innerText.toUpperCase();
+                card.style.display = name.includes(val) ? "" : "none";
+            });
+        }
+
+        function sFilter() {
+            let searchVal = document.getElementById('spareSearch').value.toUpperCase();
+            let selectedCar = document.getElementById('carModelFilter').value.toUpperCase();
+            let cards = document.querySelectorAll('#sGrid .part-card');
+
+            cards.forEach(card => {
+                let name = card.querySelector('.s-name').innerText.toUpperCase();
+                let car = card.getAttribute('data-car').toUpperCase();
+
+                let matchesSearch = name.includes(searchVal) || car.includes(searchVal);
+                let matchesCarFilter = selectedCar === "" || car.includes(selectedCar);
+
+                card.style.display = (matchesSearch && matchesCarFilter) ? "" : "none";
+            });
+        }
+
+        // Order Complete Function
+        function completeOrder() {
+            const name = document.getElementById('custName').value;
+            const phone = document.getElementById('custPhone').value;
+            const address = document.getElementById('custAddress').value;
+            const city = document.getElementById('custCity').value;
+            const payment = document.getElementById('paymentMethod').value;
+            const item = document.getElementById('partRef').value;
+            const notes = document.getElementById('notes').value || "None";
+
+            if(!name || !phone || !address || !city) {
+                alert("Please fill in all the delivery fields.");
+                return;
+            }
+
+            const message = 
+                `*📦 NEW ORDER - DEFACTOL*%0A` +
+                `----------------------------%0A` +
+                `*ITEM:* ${item}%0A` +
+                `----------------------------%0A` +
+                `*NAME:* ${name}%0A` +
+                `*PHONE:* ${phone}%0A` +
+                `*DELIVERY TO:* ${address}, ${city}%0A` +
+                `*PAYMENT:* ${payment}%0A` +
+                `*NOTES / CHASSIS:* ${notes}%0A` +
+                `----------------------------%0A` +
+                `_Generated from Defactol Web Portal_`;
+
+            const whatsappNumber = "263700000000"; 
+            window.open(`https://wa.me/${whatsappNumber}?text=${message}`);
+        }
+    </script>
+</body>
+</html>
